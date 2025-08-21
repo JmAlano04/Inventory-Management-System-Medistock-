@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MedicineController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MedicineBatchController;
+use App\Http\Controllers\InventoryController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,9 +18,7 @@ Route::get('/dashboard', function () {
 
 Route::get('/medicine', [MedicineController::class, 'index'])->middleware(['auth', 'role:admin'])->name('medicine');
 
-Route::get('/inventory', function (){
-    return view('inventory');
-})->middleware(['auth', 'verified'])->name('inventory');
+Route::get('/inventory', [InventoryController::class, 'index'])->middleware(['auth', 'role:admin'])->name('inventory');
 
 Route::get('/supplier', function (){
     return view('supplier');

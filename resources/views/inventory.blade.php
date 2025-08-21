@@ -39,17 +39,15 @@
                         <th class="px-6 py-3 text-text-light text-left font-semibold">Expiry Date</th>
                         <th class="px-6 py-3 text-text-light text-left font-semibold">Unit Cost</th>
                         <th class="px-6 py-3 text-text-light text-left font-semibold">Status</th>
-                        <th class="px-6 py-3 text-text-light text-left font-semibold">Actions></th>
+                        <th class="px-6 py-3 text-text-light text-left font-semibold">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100 bg-white">
                     @include('profile.partials.batch-table-body', ['batches' => $batches])
                 </tbody>
-
-   
             </table>
              <!-- Pagination -->
-        <div class="mt-4 flex flex-col sm:flex-row items-center justify-between px-4 py-4 bg-gray-50 border-t rounded-md">
+         <div class="mt-4 flex flex-col sm:flex-row items-center justify-between px-4 py-4 bg-gray-50 border-t rounded-md">
             <div class="text-sm text-gray-600">
                 Showing {{ $batches->firstItem() }} to {{ $batches->lastItem() }} of {{ $batches->total() }} batches
             </div>
@@ -57,13 +55,10 @@
         </div>
             <div class="mt-2 sm:mt-0">
                 {{ $batches->appends(request()->query())->links() }}
-            </div>
+            </div> 
 
-            <!-- Modal ADD-->
-        <x-show-modal :showModal="'showModal'" :action="route('inventory.store')" title="Add Item" submitText="Create">
-       
-    </div>
-
-        
-
+    <!-- Modal ADD-->
+            {{-- <x-show-modal :showModal="'showModal'" :action="route('inventory.store')" title="Add Item" submitText="Create" /> --}}
+           
+        </div>
 </x-app-layout>
