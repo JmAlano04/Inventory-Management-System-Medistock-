@@ -47,7 +47,7 @@ Route::middleware('auth')->group(function () {
 
     // INVENTORY CRUD
    Route::post('/inventory/store', [InventoryController::class, 'store'])->name('inventory.store');
-
+   Route::put('/inventory/update/{id}', [InventoryController::class, 'update'])->name('inventory.update');
 
 
 

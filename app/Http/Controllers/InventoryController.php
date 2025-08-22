@@ -8,7 +8,9 @@ use Illuminate\Http\Request;
 
 class InventoryController extends Controller
 {
-    // Show all batches
+    /**
+     * Display a listing of batches with related medicine info.
+     */
     public function index()
     {
         $batches = Batch::with('medicine')
@@ -18,15 +20,19 @@ class InventoryController extends Controller
         return view('inventory', compact('batches'));
     }
 
-    // Store a new batch (and medicine if needed)
+    /**
+     * Store a new batch and create the medicine if it doesn't exist.
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
+            // Medicine fields
             'medicine_name' => 'required|string|max:255',
             'brand_name'    => 'required|string|max:255',
             'dosage'        => 'required|string|max:255',
-            'category'     => 'required|string|max:255',
+            'category'      => 'required|string|max:255',
 
+            // Batch fields
             'batch_code'    => 'required|string|unique:batches,batch_code',
             'quantity'      => 'required|integer|min:1',
             'expiry_date'   => 'required|date|after:today',
@@ -34,13 +40,17 @@ class InventoryController extends Controller
             'status'        => 'required|string|in:Available,Expired,Out of Stock',
         ]);
 
-       $medicine = Medicine::firstOrCreate([
-            'medicine_name' => $validated['medicine_name'],
-            'brand_name'    => $validated['brand_name'],
-            'dosage'        => $validated['dosage'],
-            'category'     => $validated['category'],
-        ]);
+        // Create or retrieve the medicine
+        $medicine = Medicine::firstOrCreate(
+            [
+                'medicine_name' => $validated['medicine_name'],
+                'brand_name'    => $validated['brand_name'],
+                'dosage'        => $validated['dosage'],
+                'category'      => $validated['category'],
+            ]
+        );
 
+        // Create the batch and associate it with the medicine
         $medicine->batches()->create([
             'batch_code'  => $validated['batch_code'],
             'quantity'    => $validated['quantity'],
@@ -50,5 +60,25 @@ class InventoryController extends Controller
         ]);
 
         return redirect()->route('inventory')->with('success', 'Batch added successfully.');
+    }
+
+    /**
+     * Update the specified batch.
+     */
+    public function update(Request $request, $id)
+    {
+        $batch = Batch::findOrFail($id);
+
+        $validated = $request->validate([
+            'batch_code'  => 'required|string|unique:batches,batch_code,' . $batch->id,
+            'quantity'    => 'required|integer|min:0',
+            'expiry_date' => 'required|date|after:today',
+            'unit_cost'   => 'required|numeric|min:0',
+            'status'      => 'required|string|in:Available,Expired,Out of Stock',
+        ]);
+
+        $batch->update($validated);
+
+        return redirect()->route('inventory')->with('success', 'Batch updated successfully.');
     }
 }
