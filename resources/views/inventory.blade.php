@@ -73,7 +73,7 @@
                     </div>
                 </div>
             </div>
-            <h1>dassad</h1>
+            
             <!-- Modal Component: Add Batch -->
             <x-show-modal :showModal="'showModal'" :action="route('inventory.store')" title="Add Item" submitText="Create">
                 @csrf
