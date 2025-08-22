@@ -46,7 +46,7 @@
                             <label class="block text-gray-700">Category</label>
                             <select name="category" class="w-full border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent-dark">
                                 <option value="Antibiotic" {{ $medicine->category === 'Antibiotic' ? 'selected' : '' }}>Antibiotic</option>
-                                <option value="Analgesic" {{ $medicine->category === 'Analgesic' ? 'selected' : '' }}>Analgesic</option>
+                                <option value="General" {{ $medicine->category === 'General' ? 'selected' : '' }}>General</option>                                    
                                 <option value="Antiviral" {{ $medicine->category === 'Antiviral' ? 'selected' : '' }}>Antiviral</option>
                                 <option value="Vaccine" {{ $medicine->category === 'Vaccine' ? 'selected' : '' }}>Vaccine</option>
                             </select>

@@ -34,14 +34,19 @@ Route::get('/report', function (){
 })->middleware(['auth', 'verified'])->name('report');
 
 Route::middleware('auth')->group(function () {
+    // PROFILE CRUD
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // MEDICINE CRUD
     Route::post('/medicines', [MedicineController::class, 'store'])->name('medicines.store');
     Route::put('/medicines/{id}', [MedicineController::class, 'update'])->name('medicines.update');
     Route::get('/medicines/search', [MedicineController::class, 'search'])->name('medicines.search');
     Route::delete('/medicines/{id}', [MedicineController::class, 'destroy'])->name('medicines.destroy');
+
+    // INVENTORY CRUD
+   Route::post('/inventory/store', [InventoryController::class, 'store'])->name('inventory.store');
 
 
 

@@ -10,8 +10,7 @@ class MedicineController extends Controller
   public function index(Request $request)
     {
         $perPage = $request->get('perPage', 10); // default to 10 if not provided
-        $medicines = Medicine::paginate($perPage);
-
+        $medicines = Medicine::orderBy('created_at', 'desc')->paginate($perPage);
         return view('medicine', compact('medicines'));
     }
     public function store(Request $request)
@@ -20,7 +19,7 @@ class MedicineController extends Controller
         'medicine_name' => 'required|string|max:255',
         'brand_name' => 'required|string|max:255',
         'dosage' => 'required|string|max:255',
-        'catergory' => 'required|string|max:255',
+        'category' => 'required|string|max:255',
     ]);
 
     Medicine::create($validated);

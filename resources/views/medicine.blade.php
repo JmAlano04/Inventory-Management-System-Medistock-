@@ -100,11 +100,11 @@
                 </div>
                 <div class="mb-4 col-span-2">
                     <label class="block text-gray-700">Category</label>
-                    <select name="catergory"
+                    <select name="category"
                         class="w-full border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent">
                         <option value="" disabled selected>Select category</option>
                         <option value="Antibiotic">Antibiotic</option>
-                        <option value="Analgesic">Analgesic</option>
+                        <option value="General">General</option>
                         <option value="Antiviral">Antiviral</option>
                         <option value="Vaccine">Vaccine</option>
                     </select>

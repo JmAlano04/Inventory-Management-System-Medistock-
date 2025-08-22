@@ -14,7 +14,7 @@
 >
     <div
         @click.outside="{{ $showModal }} = false"
-        class="bg-white rounded-lg shadow-lg w-full max-w-md p-9"
+        class="bg-white rounded-lg shadow-lg w-[700px]  p-9"
         x-show="{{ $showModal }}"
         x-transition
     >
