@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Medicine;
-
+use Carbon\Carbon;
 class Batch extends Model
 {
     //
@@ -22,4 +22,9 @@ class Batch extends Model
     {
         return $this->belongsTo(Medicine::class);
     }
+    public function getIsExpiredAttribute()
+    {
+        return Carbon::now()->gt(Carbon::parse($this->expiration_date));
+    }
+
 }

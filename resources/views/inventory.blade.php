@@ -13,7 +13,13 @@
 
             {{-- POP UP SUCCESS AND ERROR --}}
             @if(session('success'))
-                <div class="bg-green-100 text-green-800 p-2 rounded my-4">
+                <div
+                x-data="{ show: true }"
+                x-init="setTimeout(() => show = false, 3000)" {{-- 3000ms = 3 seconds --}}
+                x-show="show"
+                x-transition
+                class="bg-green-100 text-green-800 px-2 py-2 m-4 rounded mb-4"
+                 >
                     {{ session('success') }}
                 </div>
             @endif
@@ -41,6 +47,15 @@
                         - View Logs
                     </button>
                 </div>
+
+                <input 
+                type="text"
+                id="search"
+                placeholder="Search..."
+                data-url="{{ route('inventory.search') }}"
+                class="w-96 border border-gray-300 rounded-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" />
+
+                 <!-- Inventory Header -->
                 <h3 class="text-lg font-semibold text-gray-800">📦 Current Stock (Batch-Based)</h3>
             </div>
 
@@ -58,7 +73,7 @@
                             <th class="px-6 py-3 text-text-light text-left font-semibold">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100 bg-white">
+                    <tbody id="table-body" class="divide-y divide-gray-100 bg-white">
                         @include('profile.partials.batch-table-body', ['batches' => $batches])
                     </tbody>
                 </table>
@@ -73,7 +88,7 @@
                     </div>
                 </div>
             </div>
-            sadadasds
+            
             <!-- Modal Component: Add Batch -->
             <x-show-modal :showModal="'showModal'" :action="route('inventory.store')" title="Add Item" submitText="Create">
                 @csrf
@@ -160,4 +175,10 @@
             </x-show-modal>
         </div>
     </div>
+
+<!-- Scripts for search-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+@vite('resources/js/ajax_search.js')
+
+
 </x-app-layout>

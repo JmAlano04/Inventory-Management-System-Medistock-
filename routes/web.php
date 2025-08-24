@@ -33,7 +33,7 @@ Route::get('/report', function (){
     return view('report');
 })->middleware(['auth', 'verified'])->name('report');
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () { 
     // PROFILE CRUD
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -48,9 +48,8 @@ Route::middleware('auth')->group(function () {
     // INVENTORY CRUD
    Route::post('/inventory/store', [InventoryController::class, 'store'])->name('inventory.store');
    Route::put('/inventory/update/{id}', [InventoryController::class, 'update'])->name('inventory.update');
-
-
-
+    Route::delete('/inventory/{id}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
+    Route::get('/inventory/search', [InventoryController::class, 'search'])->name('inventory.search');
     
 });
 

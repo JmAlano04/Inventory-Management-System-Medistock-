@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Batch;
 use App\Models\Medicine;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class InventoryController extends Controller
 {
@@ -17,7 +18,23 @@ class InventoryController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        return view('inventory', compact('batches'));
+        foreach ($batches as $batch) {
+        $isExpired = Carbon::parse($batch->expiry_date)->isPast();
+        $isOutOfStock = $batch->quantity <= 50;
+        $isAvailable = $batch->quantity > 50 && !$isExpired;
+
+         if ($isAvailable && $batch->status !== 'Available') {
+            $batch->status = 'Available';
+            $batch->save();
+        } elseif ($isExpired && $batch->status !== 'Expired') {
+            $batch->status = 'Expired';
+            $batch->save();
+        } elseif ($isOutOfStock && $batch->status !== 'Out of Stock') {
+            $batch->status = 'Out of Stock';
+            $batch->save();
+        }
+    }
+      return view('inventory', compact('batches'));
     }
 
     /**
@@ -80,5 +97,29 @@ class InventoryController extends Controller
         $batch->update($validated);
 
         return redirect()->route('inventory')->with('success', 'Batch updated successfully.');
+    }
+        public function destroy($id)
+        {
+            $batch = Batch::findOrFail($id);
+            $batch->delete();
+
+            return response()->json(['message' => 'Batch deleted successfully.']);
+        }
+    public function search(Request $request)
+    {
+    $query = $request->input('query');
+
+    $batches = Batch::where('batch_code', 'like', "%{$query}%")
+        ->orWhereHas('medicine', function ($q) use ($query) {
+            $q->where('medicine_name', 'like', "%{$query}%")
+              ->orWhere('brand_name', 'like', "%{$query}%")
+              ->orWhere('dosage', 'like', "%{$query}%")
+              ->orWhere('category', 'like', "%{$query}%");
+        })
+        ->get();
+
+    $html = view('profile.partials.batch-table-body', compact('batches'))->render();
+
+    return response()->json(['table' => $html]);
     }
 }

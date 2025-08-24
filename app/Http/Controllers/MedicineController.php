@@ -33,8 +33,8 @@ public function search(Request $request)
 
     $medicines = Medicine::where('medicine_name', 'like', "%{$query}%")
         ->orWhere('brand_name', 'like', "%{$query}%")
-        ->orWhere('dosage', 'like', "%{$query}%")
-        ->orWhere('catergory', 'like', "%{$query}%")
+        // ->orWhere('dosage', 'like', "%{$query}%")
+        // ->orWhere('catergory', 'like', "%{$query}%")
         ->orderBy('medicine_name')
         ->get();
 
