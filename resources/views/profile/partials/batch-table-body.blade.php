@@ -25,7 +25,7 @@
                                 <button  data-id="{{ $batch->id }}" class="delete-btnss bg-red-200 p-1 rounded-sm hover:bg-red-300 transition duration-150 ease-in-out">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="red" width="20px" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M136 192C136 125.7 189.7 72 256 72C322.3 72 376 125.7 376 192C376 258.3 322.3 312 256 312C189.7 312 136 258.3 136 192zM48 546.3C48 447.8 127.8 368 226.3 368L285.7 368C384.2 368 464 447.8 464 546.3C464 562.7 450.7 576 434.3 576L77.7 576C61.3 576 48 562.7 48 546.3zM472 232L616 232C629.3 232 640 242.7 640 256C640 269.3 629.3 280 616 280L472 280C458.7 280 448 269.3 448 256C448 242.7 458.7 232 472 232z"/></svg>
                                 </button>
-                                  <x-edit-modal
+                    <x-edit-modal
                                     :showModal="'showEditModal'"
                                     :action="route('inventory.update', $batch->id)"
                                     :method="'PUT'"
@@ -40,21 +40,21 @@
                         <label class="block text-gray-700">Batch Code</label>
                         <input type="text" name="batch_code" required value="{{ old('batch_code' , $batch->batch_code)  }}"
                                placeholder="e.g., BATCH123"
-                               class="w-full border border-gray-300 px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                              class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent">
                     </div>
 
                     <!-- Quantity -->
                     <div class="mb-4">
                         <label class="block text-gray-700">Quantity</label>
                         <input type="number" name="quantity" min="1" required value="{{ old('quantity' ,$batch->quantity) }}"
-                               class="w-full border border-gray-300 px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                               class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent">
                     </div>
 
                     <!-- Expiry Date -->
                     <div class="mb-4">
                         <label class="block text-gray-700">Expiry Date</label>
                         <input type="date" name="expiry_date" required value="{{ old('expiry_date' , $batch->expiry_date) }}"
-                               class="w-full border border-gray-300 px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                             class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent">
                     </div>
 
                     <!-- Unit Cost -->
@@ -62,14 +62,14 @@
                         <label class="block text-gray-700">Unit Cost (₱)</label>
                         <input type="number" name="unit_cost" min="0" step="0.01" required value="{{ old('unit_cost' , $batch->unit_cost) }}"
                                placeholder="e.g., 12.50"
-                               class="w-full border border-gray-300 px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                               class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent">
                     </div>
 
                     <!-- Status -->
                     <div class="mb-4 md:col-span-2">
                         <label class="block text-gray-700">Status</label>
                         <select name="status" required
-                                class="w-full border border-gray-300 px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent">
                             <option value="" disabled {{ old('status', $batch->status) ? '' : 'selected' }}>Select status</option>
                             <option value="Available" {{ old('status',$batch->status) == 'Available' ? 'selected' : '' }}>Available</option>
                             <option value="Expired" {{ old('status' , $batch->status) == 'Expired' ? 'selected' : '' }}>Expired</option>

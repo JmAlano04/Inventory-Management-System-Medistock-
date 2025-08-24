@@ -8,7 +8,12 @@
     </x-slot>
 
     <!-- Wrap entire page in Alpine.js x-data -->
-    <div class="py-6" x-data="{ showModal: false }">
+    <div class="py-6" x-data="{
+        showModal: false,
+        modalType: null,
+        modalTitle: '',
+        modalAction: ''
+     }">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
 
             {{-- POP UP SUCCESS AND ERROR --}}
@@ -36,17 +41,33 @@
 
             <!-- Inventory Header -->
             <div class="flex justify-between items-center mb-4">
-                <div class="flex gap-2">
-                    <button @click="showModal = true" class="bg-button-primary text-white px-2 py-1 rounded-sm hover:bg-button-hover transition">
-                        + Add Batch
-                    </button>
-                    <button @click="showModal = true" class="bg-blue-600 text-white px-2 py-1 rounded-sm hover:bg-blue-500 transition">
-                        - Dispense
-                    </button>
-                    <button @click="showModal = true" class="bg-gray-600 text-white px-2 py-1 rounded-sm hover:bg-gray-500 transition">
-                        - View Logs
-                    </button>
-                </div>
+                
+    <div class="flex gap-2">
+        <button
+            @click="
+                modalType = 'add';
+                modalTitle = 'Add New Batch';
+                modalAction = '{{ route('inventory.store') }}';
+                showModal = true;
+            "
+            class="bg-button-primary text-white px-2 py-1 rounded-sm hover:bg-button-hover transition"
+        >
+            + Add Batch
+        </button>
+
+        <button
+            @click="
+                modalType = 'dispense';
+                modalTitle = 'Dispense Medicine';
+                modalAction = '#'; 
+                showModal = true;
+            "
+            class=" text-orange-400 border border-orange-300 px-2 py-1 rounded-sm hover:text-orange-600 hover:border-orange-600  transition"
+        >
+            - Dispense
+        </button>
+    </div>
+
 
                 <input 
                 type="text"
@@ -89,90 +110,124 @@
                 </div>
             </div>
             
-            <!-- Modal Component: Add Batch -->
-            <x-show-modal :showModal="'showModal'" :action="route('inventory.store')" title="Add Item" submitText="Create">
+         <!-- Modal Component -->
+    <x-show-modal
+        :show-modal="'showModal'"
+        :action="'modalAction'"
+        x-show="showModal"
+        @click.away="showModal = false"
+        @keydown.escape.window="showModal = false"
+    >
+        {{-- ADD BATCH FORM --}}
+        <template x-if="modalType === 'add'">
+            <form method="POST" :action="modalAction" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 @csrf
-                <div class="grid grid-cols-3 md:grid-cols-2 gap-2">
-                    <!-- Medicine Name -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700">Medicine Name</label>
-                        <input type="text" name="medicine_name" required value="{{ old('medicine_name') }}"
-                               placeholder="e.g., Paracetamol"
-                               class="w-full border border-gray-300 px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-
-                    <!-- Brand Name -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700">Brand</label>
-                        <input type="text" name="brand_name" required value="{{ old('brand_name') }}"
-                               placeholder="e.g., Pfizer"
-                               class="w-full border border-gray-300 px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-
-                    <!-- Dosage -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700">Dosage</label>
-                        <input type="text" name="dosage" required value="{{ old('dosage') }}"
-                               placeholder="e.g., 500mg"
-                               class="w-full border border-gray-300 px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-
-                    <!-- Category -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700">Category</label>
-                        <select name="category" required
-                                class="w-full border border-gray-300 px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="" disabled {{ old('category') ? '' : 'selected' }}>Select category</option>
-                            <option value="Antibiotic" {{ old('category') == 'Antibiotic' ? 'selected' : '' }}>Antibiotic</option>
-                            <option value="General" {{ old('category') == 'General' ? 'selected' : '' }}>General</option>
-                            <option value="Antiviral" {{ old('category') == 'Antiviral' ? 'selected' : '' }}>Antiviral</option>
-                            <option value="Vaccine" {{ old('category') == 'Vaccine' ? 'selected' : '' }}>Vaccine</option>
-                        </select>
-                    </div>
-
-                    <!-- Batch Code -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700">Batch Code</label>
-                        <input type="text" name="batch_code" required value="{{ old('batch_code') }}"
-                               placeholder="e.g., BATCH123"
-                               class="w-full border border-gray-300 px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-
-                    <!-- Quantity -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700">Quantity</label>
-                        <input type="number" name="quantity" min="1" required value="{{ old('quantity') }}"
-                               class="w-full border border-gray-300 px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-
-                    <!-- Expiry Date -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700">Expiry Date</label>
-                        <input type="date" name="expiry_date" required value="{{ old('expiry_date') }}"
-                               class="w-full border border-gray-300 px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-
-                    <!-- Unit Cost -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700">Unit Cost (₱)</label>
-                        <input type="number" name="unit_cost" min="0" step="0.01" required value="{{ old('unit_cost') }}"
-                               placeholder="e.g., 12.50"
-                               class="w-full border border-gray-300 px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-
-                    <!-- Status -->
-                    <div class="mb-4 md:col-span-2">
-                        <label class="block text-gray-700">Status</label>
-                        <select name="status" required
-                                class="w-full border border-gray-300 px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="" disabled {{ old('status') ? '' : 'selected' }}>Select status</option>
-                            <option value="Valid" {{ old('status') == 'Valid' ? 'selected' : '' }}>Valid</option>
-                            <option value="Expired" {{ old('status') == 'Expired' ? 'selected' : '' }}>Expired</option>
-                            <option value="Out of Stock" {{ old('status') == 'Out of Stock' ? 'selected' : '' }}>Out of Stock</option>
-                        </select>
-                    </div>
+                <!-- Medicine Name -->
+                <div>
+                    <label class="block text-gray-700">Medicine Name</label>
+                    <input type="text" name="medicine_name" required placeholder="e.g., Paracetamol" value="{{ old('medicine_name') }}"
+                        class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent" />
                 </div>
-            </x-show-modal>
+
+                <!-- Brand Name -->
+                <div>
+                    <label class="block text-gray-700">Brand</label>
+                    <input type="text" name="brand_name" required placeholder="e.g., Pfizer" value="{{ old('brand_name') }}"
+                        class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent" />
+                </div>
+
+                <!-- Dosage -->
+                <div>
+                    <label class="block text-gray-700">Dosage</label>
+                    <input type="text" name="dosage" required placeholder="e.g., 500mg" value="{{ old('dosage') }}"
+                        class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent" />
+                </div>
+
+                <!-- Category -->
+                <div>
+                    <label class="block text-gray-700">Category</label>
+                    <select name="category" required
+                        class="w-full border border-gray-300 px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="" disabled {{ old('category') ? '' : 'selected' }}>Select category</option>
+                        <option value="Antibiotic" {{ old('category') == 'Antibiotic' ? 'selected' : '' }}>Antibiotic</option>
+                        <option value="General" {{ old('category') == 'General' ? 'selected' : '' }}>General</option>
+                        <option value="Antiviral" {{ old('category') == 'Antiviral' ? 'selected' : '' }}>Antiviral</option>
+                        <option value="Vaccine" {{ old('category') == 'Vaccine' ? 'selected' : '' }}>Vaccine</option>
+                    </select>
+                </div>
+
+                <!-- Batch Code -->
+                <div>
+                    <label class="block text-gray-700">Batch Code</label>
+                    <input type="text" name="batch_code" required placeholder="e.g., BATCH123" value="{{ old('batch_code') }}"
+                        class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent" />
+                </div>
+
+                <!-- Quantity -->
+                <div>
+                    <label class="block text-gray-700">Quantity</label>
+                    <input type="number" name="quantity" min="1" required value="{{ old('quantity') }}"
+                        class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent" />
+                </div>
+
+                <!-- Expiry Date -->
+                <div>
+                    <label class="block text-gray-700">Expiry Date</label>
+                    <input type="date" name="expiry_date" required value="{{ old('expiry_date') }}"
+                        class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent" />
+                </div>
+
+                <!-- Unit Cost -->
+                <div>
+                    <label class="block text-gray-700">Unit Cost (₱)</label>
+                    <input type="number" name="unit_cost" min="0" step="0.01" required placeholder="e.g., 12.50" value="{{ old('unit_cost') }}"
+                        class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent" />
+                </div>
+
+                <!-- Status -->
+                <div class="md:col-span-2">
+                    <label class="block text-gray-700">Status</label>
+                    <select name="status" required
+                        class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent">
+                        <option value="" disabled {{ old('status') ? '' : 'selected' }}>Select status</option>
+                        <option value="Valid" {{ old('status') == 'Valid' ? 'selected' : '' }}>Valid</option>
+                        <option value="Expired" {{ old('status') == 'Expired' ? 'selected' : '' }}>Expired</option>
+                        <option value="Out of Stock" {{ old('status') == 'Out of Stock' ? 'selected' : '' }}>Out of Stock</option>
+                    </select>
+                </div>
+
+                <div class="flex justify-end space-x-2 md:col-span-2 mt-4">
+                    <button type="button" @click="showModal = false" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-button-primary text-white rounded hover:bg-button-hover">Create</button>
+                </div>
+            </form>
+        </template>
+
+        {{-- DISPENSE FORM --}}
+        <template x-if="modalType === 'dispense'">
+            <form method="POST" :action="modalAction" class="space-y-4">
+                @csrf
+                <div>
+                    <label class="block text-gray-700">Batch Code</label>
+                    <input type="text" name="batch_code" placeholder="e.g., BATCH 123" required
+                        class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent" />
+                </div>
+
+                <div>
+                    <label class="block text-gray-700">Quantity to Dispense</label>
+                    <input type="number" name="quantity" min="1"  required
+                        class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent" />
+                </div>
+
+                <div class="flex justify-end space-x-2 mt-4">
+                    <button type="button" @click="showModal = false" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-button-primary text-white rounded hover:bg-blue-500">Dispense</button>
+                </div>
+            </form>
+        </template>
+
+
+    </x-show-modal>
         </div>
     </div>
 
