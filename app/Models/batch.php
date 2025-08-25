@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Medicine;
+use App\Models\Supplier;
 use Carbon\Carbon;
 class Batch extends Model
 {
@@ -21,6 +22,10 @@ class Batch extends Model
     public function medicine()
     {
         return $this->belongsTo(Medicine::class);
+    }
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
     }
     public function getIsExpiredAttribute()
     {

@@ -40,7 +40,7 @@
             @endif
 
             <!-- Inventory Header -->
-            <div class="flex justify-between items-center mb-4">
+        <div class="flex justify-between items-center mb-4">
                 
     <div class="flex gap-2">
         <button
@@ -59,7 +59,7 @@
             @click="
                 modalType = 'dispense';
                 modalTitle = 'Dispense Medicine';
-                modalAction = '#'; 
+                modalAction = '{{ route('inventory.dispense') }}';
                 showModal = true;
             "
             class=" text-orange-400 border border-orange-300 px-2 py-1 rounded-sm hover:text-orange-600 hover:border-orange-600  transition"
@@ -67,6 +67,15 @@
             - Dispense
         </button>
     </div>
+
+                <form method="GET" action="{{ url()->current() }}">
+                        <label for="perPage" class="text-sm ">Per Page:</label>
+                        <select name="perPage" id="perPage" onchange="this.form.submit()" class="border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                            <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10</option>
+                            <option value="25" {{ request('perPage') == 25 ? 'selected' : '' }}>25</option>
+                            <option value="50" {{ request('perPage') == 50 ? 'selected' : '' }}>50</option>
+                        </select>
+                    </form>
 
 
                 <input 
@@ -77,7 +86,7 @@
                 class="w-96 border border-gray-300 rounded-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" />
 
                  <!-- Inventory Header -->
-                <h3 class="text-lg font-semibold text-gray-800">📦 Current Stock (Batch-Based)</h3>
+                <h3 class="text-lg font-semibold text-gray-800">Current Stock (Batch-Based)</h3>
             </div>
 
             <!-- Inventory Table -->
@@ -183,18 +192,34 @@
                     <input type="number" name="unit_cost" min="0" step="0.01" required placeholder="e.g., 12.50" value="{{ old('unit_cost') }}"
                         class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent" />
                 </div>
+                <div>
+    <label class="block text-gray-700">Supplier</label>
+    <select name="supplier_id" required
+        class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent">
+        <option value="" selected disabled>Select supplier</option>
+        @foreach($suppliers as $supplier)
+            <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
+                {{ $supplier->name ?? 'Supplier #' . $supplier->id }}
+            </option>
+        @endforeach
+    </select>
+</div>
 
                 <!-- Status -->
-                <div class="md:col-span-2">
+                <div >
                     <label class="block text-gray-700">Status</label>
                     <select name="status" required
                         class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent">
                         <option value="" disabled {{ old('status') ? '' : 'selected' }}>Select status</option>
-                        <option value="Valid" {{ old('status') == 'Valid' ? 'selected' : '' }}>Valid</option>
+                        <option value="Valid" {{ old('status') == 'Available' ? 'selected' : '' }}>Available</option>
                         <option value="Expired" {{ old('status') == 'Expired' ? 'selected' : '' }}>Expired</option>
                         <option value="Out of Stock" {{ old('status') == 'Out of Stock' ? 'selected' : '' }}>Out of Stock</option>
                     </select>
+                       <!-- Supplier -->
+         
                 </div>
+                   
+
 
                 <div class="flex justify-end space-x-2 md:col-span-2 mt-4">
                     <button type="button" @click="showModal = false" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
@@ -205,8 +230,9 @@
 
         {{-- DISPENSE FORM --}}
         <template x-if="modalType === 'dispense'">
-            <form method="POST" :action="modalAction" class="space-y-4">
+            <form method="PUT" :action="modalAction" class="space-y-4">
                 @csrf
+                @method('PUT')
                 <div>
                     <label class="block text-gray-700">Batch Code</label>
                     <input type="text" name="batch_code" placeholder="e.g., BATCH 123" required
@@ -221,7 +247,7 @@
 
                 <div class="flex justify-end space-x-2 mt-4">
                     <button type="button" @click="showModal = false" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-button-primary text-white rounded hover:bg-blue-500">Dispense</button>
+                    <button type="submit" class="px-4 py-2 bg-button-primary text-white rounded hover:bg-orange-500">Dispense</button>
                 </div>
             </form>
         </template>

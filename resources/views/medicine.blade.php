@@ -24,10 +24,21 @@
             <!-- Add Button + Pagination Selector + Search -->
             <div class="flex flex-wrap gap-4 items-center justify-between mb-4">
                 
-                <button @click="showModal = true" class="bg-button-primary text-white px-3 py-1 rounded-sm hover:bg-button-hover transition">
+                <div class="flex flex-wrap items-center justify-between">
+                    <button @click="showModal = true" class="bg-button-primary text-white px-3 py-1 rounded-sm hover:bg-button-hover transition">
                     + Add Medicine
-                </button>
-                     
+                    </button>
+                    <form method="GET" action="{{ url()->current() }}">
+                        <label for="perPage" class="text-sm ml-2">Per Page:</label>
+                        <select name="perPage" id="perPage" onchange="this.form.submit()" class="border-gray-300 rounded-sm  focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                            <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10</option>
+                            <option value="25" {{ request('perPage') == 25 ? 'selected' : '' }}>25</option>
+                            <option value="50" {{ request('perPage') == 50 ? 'selected' : '' }}>50</option>
+                        </select>
+                    </form>
+                </div>
+                
+                
                 <input
                     type="text"
                     id="search"
@@ -36,14 +47,7 @@
                     class="w-96 border border-gray-300 rounded-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 />
 
-                <form method="GET" action="{{ url()->current() }}">
-                    <label for="perPage" class="text-sm mr-2">Per Page:</label>
-                    <select name="perPage" id="perPage" onchange="this.form.submit()" class="border-orange-200 rounded-sm text-sm focus:border-orange-500 focus:ring-1 focus:ring-orange-500">
-                        <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10</option>
-                        <option value="25" {{ request('perPage') == 25 ? 'selected' : '' }}>25</option>
-                        <option value="50" {{ request('perPage') == 50 ? 'selected' : '' }}>50</option>
-                    </select>
-                </form>
+                <h3 class="text-lg font-semibold text-gray-800">Current Medicine</h3>
             </div>
 
             <!-- Table -->

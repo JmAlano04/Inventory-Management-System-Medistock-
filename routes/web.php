@@ -5,13 +5,14 @@ use App\Http\Controllers\MedicineController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MedicineBatchController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\SupplierController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 
-//  Routes admin
+//  Routes admin DEFAULD PAGE
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'role:admin'])->name('dashboard');
@@ -20,9 +21,9 @@ Route::get('/medicine', [MedicineController::class, 'index'])->middleware(['auth
 
 Route::get('/inventory', [InventoryController::class, 'index'])->middleware(['auth', 'role:admin'])->name('inventory');
 
-Route::get('/supplier', function (){
-    return view('supplier');
-})->middleware(['auth', 'verified'])->name('supplier');
+Route::get('/supplier', [SupplierController::class, 'index'])->middleware(['auth', 'role:admin'])->name('supplier');
+
+
 Route::get('/expiry-monitoring', function (){
     return view('Expiry-Monitoring');
 })->middleware(['auth', 'verified'])->name('expiry-monitoring');
@@ -48,8 +49,12 @@ Route::middleware('auth')->group(function () {
     // INVENTORY CRUD
    Route::post('/inventory/store', [InventoryController::class, 'store'])->name('inventory.store');
    Route::put('/inventory/update/{id}', [InventoryController::class, 'update'])->name('inventory.update');
-    Route::delete('/inventory/{id}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
-    Route::get('/inventory/search', [InventoryController::class, 'search'])->name('inventory.search');
+   Route::delete('/inventory/{id}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
+   Route::get('/inventory/search', [InventoryController::class, 'search'])->name('inventory.search');
+    Route::get('/inventory/dispense', [InventoryController::class, 'dispense'])->name('inventory.dispense');
+
+    // SUPPLIER CRUD
+    Route::put('/supplier/update/{id}', [SupplierController::class, 'update'])->name('supplier.update');
     
 });
 

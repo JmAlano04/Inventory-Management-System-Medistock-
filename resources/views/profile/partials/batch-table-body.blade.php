@@ -3,10 +3,12 @@
                         <tr class="text-text-base hover:bg-gray-100 transition duration-150 ease-in-out">
                             <td class="px-6 py-4 text-text-base\\">{{ $batch->medicine->medicine_name ?? 'Unknown' }}</td>
                             <td class="px-6 py-4">{{ $batch->batch_code }}</td>
+                            
                             <td class="px-6 py-4">{{ $batch->quantity }}</td>
                             <td class="px-6 py-4">{{ \Carbon\Carbon::parse($batch->expiry_date)->format('Y-m-d') }}</td>
                             <td class="px-6 py-4">₱{{ number_format($batch->unit_cost, 2) }}</td>
                             <td class="px-6 py-4">
+                                
                                 @if ($batch->status === 'Available')
                                     <span class="px-2 py-1 bg-green-400 text-gray-800 rounded-md text-sm font-semibold">Available</span>
                                     
