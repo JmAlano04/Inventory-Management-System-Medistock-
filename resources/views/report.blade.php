@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
           <h2 class="font-bold text-2xl text-text-base text-center leading-tight tracking-wide">
-            {{ __('Report') }}
+            {{ __('Report Management') }}
         </h2>
     </x-slot>
     <div class="py-12">

@@ -23,11 +23,22 @@
 
             <!-- Add Button + Pagination Selector + Search -->
             <div class="flex flex-wrap gap-4 items-center justify-between mb-4">
-                
+               
                 <div class="flex flex-wrap items-center justify-between">
-                    <button @click="showModal = true" class="bg-button-primary text-white px-3 py-1 rounded-sm hover:bg-button-hover transition">
-                    + Add Medicine
-                    </button>
+
+                @auth
+                    @if (auth()->user()->role == 'staff')
+                         <button disabled @click="showModal = true"  modalTitle = 'Add New Batch'; class="bg-button-primary text-white px-3 py-1 rounded-sm hover:bg-button-hover transition">
+                            + Add Medicine
+                        </button>
+                    @elseif (auth()->user()->role == 'admin')
+                        <button  @click="showModal = true"  modalTitle = 'Add New Batch'; class="bg-button-primary text-white px-3 py-1 rounded-sm hover:bg-button-hover transition">
+                                + Add Medicine
+                        </button>
+                    @endif
+                @endauth
+                  
+                   
                     <form method="GET" action="{{ url()->current() }}">
                         <label for="perPage" class="text-sm ml-2">Per Page:</label>
                         <select name="perPage" id="perPage" onchange="this.form.submit()" class="border-gray-300 rounded-sm  focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent">
@@ -80,8 +91,10 @@
         </div>
 
         <!-- Modal ADD-->
-        <x-show-modal :showModal="'showModal'" :action="route('medicines.store')" title="Add Item" submitText="Create">
-            
+        <x-show-modal :showModal="'showModal'"  submitText="Create">
+            <form action="{{ route('medicines.store') }}" method="POST">
+            @csrf
+             <h2 class="text-lg font-semibold mb-4" >Add Item</h2>
            <div class="grid grid-cols-2 gap-4">
                 <div class="mb-4">
                     <label class="block text-gray-700">Medicine</label>
@@ -114,7 +127,12 @@
                         <option value="Vaccine">Vaccine</option>
                     </select>
                 </div>
+                    <div class="flex justify-end space-x-2 md:col-span-2 mt-4">
+                    <button type="button" @click="showModal = false" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-button-primary text-white rounded hover:bg-button-hover">Create</button>
+                </div>
             </div>
+            </form>
      </x-show-modal>
      
     </div>

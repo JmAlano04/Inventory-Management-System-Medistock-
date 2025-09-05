@@ -11,63 +11,77 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-//  Routes admin DEFAULD PAGE
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'role:admin'])->name('dashboard');
-
-Route::get('/medicine', [MedicineController::class, 'index'])->middleware(['auth', 'role:admin'])->name('medicine');
-
-Route::get('/inventory', [InventoryController::class, 'index'])->middleware(['auth', 'role:admin'])->name('inventory');
-
-Route::get('/supplier', [SupplierController::class, 'index'])->middleware(['auth', 'role:admin'])->name('supplier');
-
-
-Route::get('/expiry-monitoring', function (){
-    return view('Expiry-Monitoring');
-})->middleware(['auth', 'verified'])->name('expiry-monitoring');
-Route::get('/low-stock-alert', function (){
-    return view('low-stock-alert');
-})->middleware(['auth', 'verified'])->name('low-stock-alert');
-Route::get('/report', function (){
-    return view('report');
-})->middleware(['auth', 'verified'])->name('report');
-
+// DEFAULT AUTHENTICATION ROUTE
 Route::middleware('auth')->group(function () { 
     // PROFILE CRUD
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    // MEDICINE CRUD
-    Route::post('/medicines', [MedicineController::class, 'store'])->name('medicines.store');
-    Route::put('/medicines/{id}', [MedicineController::class, 'update'])->name('medicines.update');
-    Route::get('/medicines/search', [MedicineController::class, 'search'])->name('medicines.search');
-    Route::delete('/medicines/{id}', [MedicineController::class, 'destroy'])->name('medicines.destroy');
-
-    // INVENTORY CRUD
-   Route::post('/inventory/store', [InventoryController::class, 'store'])->name('inventory.store');
-   Route::put('/inventory/update/{id}', [InventoryController::class, 'update'])->name('inventory.update');
-   Route::delete('/inventory/{id}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
-   Route::get('/inventory/search', [InventoryController::class, 'search'])->name('inventory.search');
-    Route::get('/inventory/dispense', [InventoryController::class, 'dispense'])->name('inventory.dispense');
-
-    // SUPPLIER CRUD
-    Route::put('/supplier/update/{id}', [SupplierController::class, 'update'])->name('supplier.update');
-    
 });
 
 
+// Administrator and Staff ROUTE
+Route::group(['middleware' => ['auth']], function () {
 
-// Route::get('/inventory', [MedicineBatchController::class, 'index'])->name('inventory');
-// Route::get('/inventory', [MedicineBatchController::class,'store'])->name('inventory.store');
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
+    // Medicine
+    Route::get('/medicine', [MedicineController::class, 'index'])
+        ->name('medicine');
+    Route::post('/medicines', [MedicineController::class, 'store'])
+        ->name('medicines.store');
+    Route::put('/medicines/{id}', [MedicineController::class, 'update'])
+        ->name('medicines.update');
+    Route::get('/medicines/search', [MedicineController::class, 'search'])
+        ->name('medicines.search');
+    Route::delete('/medicines/{id}', [MedicineController::class, 'destroy'])
+        ->name('medicines.destroy');
+
+    // Inventory
+    Route::get('/inventory', [InventoryController::class, 'index'])
+        ->name('inventory');
+    Route::post('/inventory/store', [InventoryController::class, 'store'])
+        ->name('inventory.store');
+    Route::put('/inventory/update/{id}', [InventoryController::class, 'update'])
+        ->name('inventory.update');
+    Route::delete('/inventory/{id}', [InventoryController::class, 'destroy'])
+        ->name('inventory.destroy');
+    Route::get('/inventory/search', [InventoryController::class, 'search'])
+        ->name('inventory.search');
+    Route::get('/inventory/dispense', [InventoryController::class, 'dispense'])
+        ->name('inventory.dispense');
+
+    // Supplier
+    Route::get('/supplier', [SupplierController::class, 'index'])
+        ->name('supplier');
+    Route::put('/supplier/update/{id}', [SupplierController::class, 'update'])
+        ->name('supplier.update');
+    Route::get('/supplier/search', [SupplierController::class, 'search'])
+        ->name('supplier.search');
+    Route::post('/supplier/store', [SupplierController::class, 'store'])
+        ->name('supplier.store');
+
+    // Expiry Monitoring
+    Route::get('/expiry-monitoring', function () {
+        return view('Expiry-Monitoring');
+    })->name('expiry-monitoring');
+
+    // Low Stock Alert
+    Route::get('/low-stock-alert', function () {
+        return view('low-stock-alert');
+    })->name('low-stock-alert');
+
+    // Report
+    Route::get('/report', function () {
+        return view('report');
+    })->name('report');
+});
 
 
+// USER ROUTE
 
-// Routes user
-Route::get('/user/dashboard', function () {
-    return view('user');
-})->middleware(['auth', 'role:user'])->name('user.dashboard');
 
 require __DIR__.'/auth.php';

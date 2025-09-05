@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
@@ -15,9 +16,12 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, $role): Response
     {
-        if (!$request->user() || $request->user()->role !== $role) {
-            abort(403, 'YOU ARE NOT AUTHORIZED.');
-        }
+
+
+        // Check if user has one of the roles
+        if (!$request->user()->role && $request->user()->role == $role) {
+            abort(403, 'YOU ARE NOT AUTHORIZED.');}
+         // Split roles by comma if multiple roles are passed
         return $next($request);
     }
 }

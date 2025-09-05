@@ -4,20 +4,20 @@
             <h1 class="text-2xl font-semibold text-text-base ml-3">
                 Inventory Overview
             </h1>
-            <div class="flex space-x-2">
-                <button class="px-4 py-2 bg-button-primary hover:bg-button-hover rounded-md text-sm text-white font-medium flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-                    </svg>
-                    New Item
-                </button>
-                <button class="px-4 py-2 bg-white border border-secondary-light hover:bg-secondary-light rounded-md text-sm text-text-base font-medium flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
-                    </svg>
-                    Export
-                </button>
-            </div>
+                    <div class="flex space-x-2">
+                        <button class="px-4 py-2 bg-button-primary hover:bg-button-hover rounded-md text-sm text-white font-medium flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                            </svg>
+                            New Item
+                        </button>
+                        <button class="px-4 py-2 bg-white border border-secondary-light hover:bg-secondary-light rounded-md text-sm text-text-base font-medium flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                            Export
+                        </button>
+                    </div>
         </div>
     </x-slot>
 
@@ -57,7 +57,7 @@
                     <p class="text-xs text-text-muted">Updated just now</p>
                 </div>
             </div>
-
+            
             <!-- Critical Items Card -->
             <div class="bg-white p-5 rounded-lg border border-secondary-light shadow-xs">
                 <div class="flex items-center mb-4">

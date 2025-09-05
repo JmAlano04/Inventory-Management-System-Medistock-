@@ -31,13 +31,15 @@
 
     <!-- Main Content -->
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
-        <div>
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </div>
+       
 
         <div class="w-full sm:max-w-md mt-6 px-10 py-10 bg-secondary-light shadow-lg overflow-hidden sm:rounded-md">
+            
+        <div class="text-center">
+            <a href="/" class="text-green-900 text-2xl">
+                Medistock.
+            </a>
+        </div>
             {{ $slot }}
         </div>
     </div>

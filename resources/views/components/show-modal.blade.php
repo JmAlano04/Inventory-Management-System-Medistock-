@@ -11,7 +11,7 @@
         x-transition
     >
         <h2 class="text-lg font-semibold mb-4" x-text="modalTitle"></h2>
-
+        
         {{ $slot }}
     </div>
 </div>
