@@ -27,9 +27,6 @@
                 </div>
             @endif
 
-
-
-             
                   @if($errors->any())
                     <div
                     x-data="{ show: true }"
