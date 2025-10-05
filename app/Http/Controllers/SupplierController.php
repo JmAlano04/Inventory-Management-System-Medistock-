@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Batch;
+use App\Models\Batches;
 use App\Models\Supplier;
 
 class SupplierController extends Controller
@@ -11,7 +11,7 @@ class SupplierController extends Controller
     //
     public function index()
     {
-        $batches = Batch::paginate(10);
+        $batches = Batches::paginate(10);
 
 
         $suppliers = Supplier::paginate(10);

@@ -13,10 +13,10 @@ class MedicineSeeder extends Seeder
         for ($i = 1; $i <= 10; $i++) {
             DB::table('medicines')->insert([
                 'id'             => $i,
-                'medicine_name'  => 'Medicine' . $i,
+                'batches_id'  => rand(1,10),
                 'brand_name'     => 'Brand' . $i,
                 'dosage'         => rand(100, 500) . 'mg',
-                'catergory'      => 'General',
+                'category'      => 'General',
                 'created_at'     => now(),
                 'updated_at'     => now(),
             ]);

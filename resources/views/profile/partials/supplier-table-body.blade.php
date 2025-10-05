@@ -1,5 +1,5 @@
    @foreach ($suppliers as $supplier)
-                        <tr>
+                        <tr class="text-text-base hover:bg-gray-100 transition duration-150 ease-in-out">
                             <td class="px-6 py-4">{{ $supplier->supplier_name }}</td>
                             <td class="px-6 py-4">{{ $supplier->contact_person }}</td>
                             <td class="px-6 py-4">{{ $supplier->phone }}</td>
@@ -28,23 +28,23 @@
                         
                             <div class="mb-2">
                                 <label class="block text-sm font-medium mb-1">Supplier Name</label>
-                                <input type="text" name="supplier_name" value="{{ $supplier->supplier_name }}" class="w-full border rounded px-3 py-2" required>
+                                <input type="text" name="supplier_name" value="{{ $supplier->supplier_name }}" class="w-full border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:outline-none focus:ring-2 focus:ring-accent-dark" required>
                             </div>
                             <div class="mb-2">
                                 <label class="block text-sm font-medium mb-1">Contact Person</label>
-                                <input type="text" name="contact_person" value="{{ $supplier->contact_person }}" class="w-full border rounded px-3 py-2">
+                                <input type="text" name="contact_person" value="{{ $supplier->contact_person }}" class="w-full border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:outline-none focus:ring-2 focus:ring-accent-dark">
                             </div>
                             <div class="mb-2">
                                 <label class="block text-sm font-medium mb-1">Phone</label>
-                                <input type="text" name="phone" value="{{ $supplier->phone }}" class="w-full border rounded px-3 py-2">
+                                <input type="text" name="phone" value="{{ $supplier->phone }}" class="w-full border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:outline-none focus:ring-2 focus:ring-accent-dark">
                             </div>
                             <div class="mb-2">
                                 <label class="block text-sm font-medium mb-1">Email</label>
-                                <input type="email" name="email" value="{{ $supplier->email }}" class="w-full border rounded px-3 py-2">
+                                <input type="email" name="email" value="{{ $supplier->email }}" class="w-full border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:outline-none focus:ring-2 focus:ring-accent-dark">
                             </div>
                             <div class="mb-2">
                                 <label class="block text-sm font-medium mb-1">Address</label>
-                                <input type="text" name="address" value="{{ $supplier->address }}" class="w-full border rounded px-3 py-2">
+                                <input type="text" name="address" value="{{ $supplier->address }}" class="w-full border-accent-dark outline-none px-3 py-2 rounded mt-1 focus:outline-none focus:outline-none focus:ring-2 focus:ring-accent-dark">
                             </div>
                            
                        

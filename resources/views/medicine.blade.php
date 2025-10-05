@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-bold text-2xl text-text-base text-center leading-tight tracking-wide">
-            {{ __('Medicine Inventory') }}
+            {{ __('Medicine Management') }}
         </h2>
     </x-slot>
 
@@ -26,20 +26,15 @@
                
                 <div class="flex flex-wrap items-center justify-between">
 
-                @auth
-                    @if (auth()->user()->role == 'staff')
-                         <button disabled @click="showModal = true"  modalTitle = 'Add New Batch'; class="bg-button-primary text-white px-3 py-1 rounded-sm hover:bg-button-hover transition">
-                            + Add Medicine
-                        </button>
-                    @elseif (auth()->user()->role == 'admin')
-                        <button  @click="showModal = true"  modalTitle = 'Add New Batch'; class="bg-button-primary text-white px-3 py-1 rounded-sm hover:bg-button-hover transition">
-                                + Add Medicine
-                        </button>
-                    @endif
-                @endauth
-                  
-                   
-                    <form method="GET" action="{{ url()->current() }}">
+{{--               
+                     <button  @click="showModal = true"  modalTitle = 'Add New Batch'; class="bg-button-primary text-white px-3 py-1 rounded-sm hover:bg-button-hover transition">
+                                Import
+                    </button>
+                     <button  @click="showModal = true"  modalTitle = 'Add New Batch'; class="bg-button-primary text-white px-3 py-1 rounded-sm hover:bg-button-hover transition">
+                                Export
+                    </button> --}}
+                       
+                 <form method="GET" action="{{ url()->current() }}">
                         <label for="perPage" class="text-sm ml-2">Per Page:</label>
                         <select name="perPage" id="perPage" onchange="this.form.submit()" class="border-gray-300 rounded-sm  focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent">
                             <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10</option>
@@ -48,8 +43,7 @@
                         </select>
                     </form>
                 </div>
-                
-                
+               
                 <input
                     type="text"
                     id="search"
@@ -57,19 +51,28 @@
                     data-url="{{ route('medicines.search') }}"
                     class="w-96 border border-gray-300 rounded-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 />
-
-                <h3 class="text-lg font-semibold text-gray-800">Current Medicine</h3>
+                
+                
+                        
+                  
+                       
+                   <h3 class="text-lg font-semibold text-gray-800">{{__('Current Medicine Stock')}}</h3>
+                   
+                 
             </div>
 
             <!-- Table -->
-            <div id="medicine-table" class="bg-white border border-gray-200 shadow-md rounded-md overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200 text-sm text-text-base">
+            <div id="medicine-table" class="bg-white border border-gray-200 shadow-md rounded-md overflow-x-scroll">
+                <table class="min-w-full divide-y divide-gray-200 text-sm text-text-base ">
                     <thead class="bg-secondary-dark text-text-light">
                         <tr>
-                            <th class="px-4 py-3 text-left">Medicine</th>
+                            <th class="px-4 py-3 text-left">{{ __('Medicine')}} </th>
                             <th class="px-4 py-3 text-left">Brand</th>
                             <th class="px-4 py-3 text-left">Dosage</th>
                             <th class="px-4 py-3 text-left">Category</th>
+                            <th class="px-4 py-3 text-left">Unit cost</th>
+                            <th class="px-4 py-3 text-left">Quantity</th>
+                            <th class="px-4 py-3 text-left">Status</th>
                             <th class="px-4 py-3 text-left">Action</th>
                         </tr>
                     </thead>
@@ -91,7 +94,7 @@
         </div>
 
         <!-- Modal ADD-->
-        <x-show-modal :showModal="'showModal'"  submitText="Create">
+        {{-- <x-show-modal :showModal="'showModal'"  submitText="Create">
             <form action="{{ route('medicines.store') }}" method="POST">
             @csrf
              <h2 class="text-lg font-semibold mb-4" >Add Item</h2>
@@ -133,7 +136,7 @@
                 </div>
             </div>
             </form>
-     </x-show-modal>
+     </x-show-modal> --}}
      
     </div>
 

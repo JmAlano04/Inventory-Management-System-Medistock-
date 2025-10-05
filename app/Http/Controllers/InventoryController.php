@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Batch;
+use App\Models\Batches;
+
 use App\Models\Medicine;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
@@ -16,30 +17,36 @@ class InventoryController extends Controller
     public function index()
     {
         $perPage = request()->get('perPage', 10);
-        $batches = Batch::with('medicine')
+        $batches = Batches::with('supplier')
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
 
-        $suppliers = Supplier::all();
-
-        foreach ($batches as $batch) {
+            $suppliers = Supplier::all();
+            $medicines = Medicine::all();
+        
+            foreach ($batches as $batch) {
             $isExpired = Carbon::parse($batch->expiry_date)->isPast();
             $isOutOfStock = $batch->quantity <= 50;
             $isAvailable = $batch->quantity > 50 && !$isExpired;
-
-            if ($isAvailable && $batch->status !== 'Available') {
+            $double = $isExpired && $isOutOfStock;
+            
+            if ($double && $batch->status !== 'Out of Stock and Expired') {
+                $batch->status = 'Out of Stock and Expired';
+                $batch->save();
+            } elseif ($isAvailable && $batch->status !== 'Available') {
                 $batch->status = 'Available';
                 $batch->save();
-            } elseif ($isExpired && $batch->status !== 'Expired') {
+            } elseif ($isExpired && $batch->status !== 'Expired' && !$double) {
                 $batch->status = 'Expired';
                 $batch->save();
-            } elseif ($isOutOfStock && $batch->status !== 'Out of Stock') {
+            } elseif ($isOutOfStock && $batch->status !== 'Out of Stock' && !$double) {
                 $batch->status = 'Out of Stock';
                 $batch->save();
             }
         }
+        
 
-        return view('inventory', compact('batches', 'suppliers'));
+        return view('inventory', compact('batches', 'suppliers', 'medicines'));
     }
 
     /**
@@ -48,40 +55,39 @@ class InventoryController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            // Medicine fields
-            'medicine_name' => 'required|string|max:255',
-            'brand_name'    => 'required|string|max:255',
-            'dosage'        => 'required|string|max:255',
-            'category'      => 'required|string|max:255',
-
             // Batch fields
+            'medicine_name' => 'required|string',
+            'brand_name'    => 'required|string',
+            'dosage'        => 'required|string',
+            'category'      => 'required|string|in:Antibiotic,General,Antiviral,Vaccine',
             'batch_code'    => 'required|string|unique:batches,batch_code',
             'quantity'      => 'required|integer|min:1',
             'expiry_date'   => 'required|date|after:today',
             'unit_cost'     => 'required|numeric|min:0',
-            'status'        => 'required|string|in:Available,Expired,Out of Stock',
+            'status'        => 'required|string|in:Available,Expired,Out of Stock,Out of Stock and Expired',
             'supplier_id'   => 'nullable|exists:suppliers,id',
-        ]);
+        ]); 
 
         // Create or retrieve the medicine
-        $medicine = Medicine::firstOrCreate([
+        $Batches = Batches::firstOrCreate( [
             'medicine_name' => $validated['medicine_name'],
-            'brand_name'    => $validated['brand_name'],
-            'dosage'        => $validated['dosage'],
-            'category'      => $validated['category'],
-        ]);
-
-        // Create the batch and associate it with the medicine
-        $medicine->batches()->create([
             'batch_code'  => $validated['batch_code'],
             'quantity'    => $validated['quantity'],
             'expiry_date' => $validated['expiry_date'],
             'unit_cost'   => $validated['unit_cost'],
             'status'      => $validated['status'],
-            'supplier_id' => $validated['supplier_id'] ?? null, // fixed here
+            'supplier_id' => $validated['supplier_id'], // fixed here
         ]);
 
+        $Batches->medicine()->create([
+            'brand_name'    => $validated['brand_name'],
+            'dosage'        => $validated['dosage'],
+            'category'      => $validated['category'],
+        ]);
+
+        
         return redirect()->route('inventory')->with('success', 'Batch added successfully.');
+        
     }
 
     /**
@@ -89,25 +95,33 @@ class InventoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $batch = Batch::findOrFail($id);
+        $batch = Batches::findOrFail($id);
 
         $validated = $request->validate([
+
+            
+            // 'brand_name'    => 'required|string',
+            // 'dosage'        => 'required|string',
+            // 'category'      => 'required|string|in:Antibiotic,General,Antiviral,Vaccine',
+            'medicine_name' => 'required|string',
             'batch_code'  => 'required|string|unique:batches,batch_code,' . $batch->id,
             'quantity'    => 'required|integer|min:0',
-            'expiry_date' => 'required|date|after:today',
+            'expiry_date' => 'required|date',
             'unit_cost'   => 'required|numeric|min:0',
-            'status'      => 'required|string|in:Available,Expired,Out of Stock',
-            'supplier_id' => 'nullable|exists:suppliers,id',
+            // 'status'      => 'required|string|in:Available,Expired,Out of Stock,Out of Stock and Expired',
+            'supplier_id'   => 'nullable|exists:suppliers,id',
+            // 'supplier_id' => 'nullable|exists:suppliers,id',
         ]);
 
         // Update the batch including supplier_id safely
         $batch->update([
+            'medicine_name' => $validated['medicine_name'],
             'batch_code'  => $validated['batch_code'],
             'quantity'    => $validated['quantity'],
             'expiry_date' => $validated['expiry_date'],
             'unit_cost'   => $validated['unit_cost'],
-            'status'      => $validated['status'],
-            'supplier_id' => $validated['supplier_id'] ?? null,
+            // 'status'      => $validated['status'],
+            // 'supplier_id' => $validated['supplier_id'] ?? null,
         ]);
 
         return redirect()->route('inventory')->with('success', 'Batch updated successfully.');
@@ -118,7 +132,7 @@ class InventoryController extends Controller
      */
     public function destroy($id)
     {
-        $batch = Batch::findOrFail($id);
+        $batch = Batches::findOrFail($id);
         $batch->delete();
 
         return response()->json(['message' => 'Batch deleted successfully.']);
@@ -131,7 +145,7 @@ class InventoryController extends Controller
     {
         $query = $request->input('query');
 
-        $batches = Batch::where('batch_code', 'like', "%{$query}%")
+        $batches = Batches::where('batch_code', 'like', "%{$query}%")
             ->orWhereHas('medicine', function ($q) use ($query) {
                 $q->where('medicine_name', 'like', "%{$query}%")
                   ->orWhere('brand_name', 'like', "%{$query}%")
@@ -155,7 +169,7 @@ class InventoryController extends Controller
             'quantity'   => 'required|integer|min:1',
         ]);
 
-        $batch = Batch::where('batch_code', $request->batch_code)->first();
+        $batch = Batches::where('batch_code', $request->batch_code)->first();
 
         if (!$batch) {
             return back()->withErrors(['batch_code' => 'Batch not found.']);

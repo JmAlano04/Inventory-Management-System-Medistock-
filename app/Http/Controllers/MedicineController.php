@@ -4,14 +4,27 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Medicine;
+use App\Models\Batches;
 
-class MedicineController extends Controller
+class MedicineController extends Controller 
 {
   public function index(Request $request)
     {
         $perPage = $request->get('perPage', 10); // default to 10 if not provided
-        $medicines = Medicine::orderBy('created_at', 'desc')->paginate($perPage);
+        $medicines = Medicine::with('batches')
+        ->whereHas('batches', function ($query){
+            $query->where('status', '=' ,'Available')
+                  ->orWhere('status', '=', 'Out of Stock');
+        })
+        ->orderBy('created_at', 'desc')
+        ->paginate($perPage);
+
+         
+        // $batches = Batches::all();
+        
         return view('medicine', compact('medicines'));
+        
+       
     }
     public function store(Request $request)
 {
@@ -31,7 +44,7 @@ public function search(Request $request)
 {
     $query = $request->input('query');
 
-    $medicines = Medicine::where('medicine_name', 'like', "%{$query}%")
+    $medicines = Medicine::with('batches')->where('medicine_name', 'like', "%{$query}%")
         ->orWhere('brand_name', 'like', "%{$query}%")
         // ->orWhere('dosage', 'like', "%{$query}%")
         // ->orWhere('catergory', 'like', "%{$query}%")
@@ -40,7 +53,7 @@ public function search(Request $request)
 
     $html = view('profile.partials.medicine-table-body', compact('medicines'))->render();
 
-    return response()->json(['table' => $html]);
+    return response()->json(['table' => $html]);  
 }
 public function destroy($id)
 {

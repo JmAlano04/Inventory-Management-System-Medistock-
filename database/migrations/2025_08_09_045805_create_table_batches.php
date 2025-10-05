@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         //
-        Schema::create("batches", function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('medicine_id')->constrained()->onDelete('cascade');
-            $table->integer('batch_code');
-            $table->integer('quantity');
-            $table->date('expiry_date');
-            $table->integer('unit_cost');
-            $table->string('status'); 
-            $table->timestamps();
-        });
+        // Schema::create("batches", function (Blueprint $table) {
+        //     $table->id();
+        //     $table->foreignId('medicine_id')->constrained()->onDelete('cascade');
+        //     $table->integer('batch_code');
+        //     $table->integer('quantity');
+        //     $table->date('expiry_date');
+        //     $table->integer('unit_cost');
+        //     $table->string('status'); 
+        //     $table->timestamps();
+        // });
     }
 
     /**

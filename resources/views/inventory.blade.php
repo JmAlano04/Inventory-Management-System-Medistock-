@@ -29,15 +29,26 @@
                 </div>
             @endif
 
-            @if($errors->any())
-                <div class="bg-red-100 text-red-800 p-2 rounded my-4">
-                    <ul>
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+
+
+             
+                  @if($errors->any())
+                    <div
+                    x-data="{ show: true }"
+                    x-init="setTimeout(() => show = false, 3000)" {{-- 3000ms = 3 seconds --}}
+                    x-show="show"
+                    x-transition 
+                    class="bg-red-100 text-red-800 p-2 rounded my-4"
+                    >
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif  
+                  
+              
 
             <!-- Inventory Header -->
         <div class="flex justify-between items-center mb-4">
@@ -53,15 +64,15 @@
             class="bg-button-primary text-white px-2 py-1 rounded-sm hover:bg-button-hover transition"
         >
             + Add Batch
-        </button>
-
+        </button>   
+        
         <button
             @click="
                 modalType = 'dispense';
                 modalTitle = 'Dispense Medicine';
                 modalAction = '{{ route('inventory.dispense') }}';
                 showModal = true;
-            "
+             "
             class=" text-orange-400 border border-orange-300 px-2 py-1 rounded-sm hover:text-orange-600 hover:border-orange-600  transition"
         >
             - Dispense
@@ -98,7 +109,7 @@
                             <th class="px-6 py-3 text-text-light text-left font-semibold">Batch Code</th>
                             <th class="px-6 py-3 text-text-light text-left font-semibold">Quantity</th>
                             <th class="px-6 py-3 text-text-light text-left font-semibold">Expiry Date</th>
-                            <th class="px-6 py-3 text-text-light text-left font-semibold">Unit Cost</th>
+                            <th class="px-6 py-3 text-text-light text-left font-semibold">Supplier</th>
                             <th class="px-6 py-3 text-text-light text-left font-semibold">Status</th>
                             <th class="px-6 py-3 text-text-light text-left font-semibold">Actions</th>
                         </tr>
@@ -107,7 +118,7 @@
                         @include('profile.partials.batch-table-body', ['batches' => $batches])
                     </tbody>
                 </table>
-
+      
                 <!-- Pagination -->
                 <div class="mt-4 flex flex-col sm:flex-row items-center justify-between px-4 py-4 bg-gray-50 border-t rounded-md">
                     <div class="text-sm text-gray-600">
@@ -131,37 +142,37 @@
         <template x-if="modalType === 'add'">
             <form method="POST" :action="modalAction" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 @csrf
-                <!-- Medicine Name -->
-                <div>
-                    <label class="block text-gray-700">Medicine Name</label>
-                    <input type="text" name="medicine_name" required placeholder="e.g., Paracetamol" value="{{ old('medicine_name') }}"
-                        class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent" />
-                </div>
+            <!-- Medicine Name -->     
+           <div class="mb-4">
+                    <label class="block text-gray-700">Medicine</label>
+                    <input type="text" name="medicine_name" required value="{{ old('medicine_name') }}"
+                        placeholder="e.g., Paracetamol"
+                        class="w-full border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent">
+                    
+                    </div>
 
-                <!-- Brand Name -->
-                <div>
+                <div class="mb-4">
                     <label class="block text-gray-700">Brand</label>
-                    <input type="text" name="brand_name" required placeholder="e.g., Pfizer" value="{{ old('brand_name') }}"
-                        class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent" />
+                    <input type="text" name="brand_name" required value="{{ old('brand_name') }}"
+                        placeholder="e.g., BrandName"
+                        class="w-full border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent">
                 </div>
 
-                <!-- Dosage -->
-                <div>
+                <div class="mb-4">
                     <label class="block text-gray-700">Dosage</label>
-                    <input type="text" name="dosage" required placeholder="e.g., 500mg" value="{{ old('dosage') }}"
-                        class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent" />
+                    <input type="text" name="dosage" required value="{{ old('dosage') }}"
+                        placeholder="e.g., 500mg"
+                        class="w-full border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent">
                 </div>
-
-                <!-- Category -->
-                <div>
+                <div class="mb-4">
                     <label class="block text-gray-700">Category</label>
-                    <select name="category" required
-                        class="w-full border border-gray-300 px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="" disabled {{ old('category') ? '' : 'selected' }}>Select category</option>
+                    <select name="category" required 
+                        class="w-full border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent">
+                        <option value="" disabled {{ old('category') == '' ? 'selected' : '' }} selected>Select category</option>
                         <option value="Antibiotic" {{ old('category') == 'Antibiotic' ? 'selected' : '' }}>Antibiotic</option>
                         <option value="General" {{ old('category') == 'General' ? 'selected' : '' }}>General</option>
                         <option value="Antiviral" {{ old('category') == 'Antiviral' ? 'selected' : '' }}>Antiviral</option>
-                        <option value="Vaccine" {{ old('category') == 'Vaccine' ? 'selected' : '' }}>Vaccine</option>
+                        <option value="Vaccine" {{ old('Vaccine') == 'Vaccine' ? 'selected' : '' }}>Vaccine</option>
                     </select>
                 </div>
 
@@ -175,7 +186,7 @@
                 <!-- Quantity -->
                 <div>
                     <label class="block text-gray-700">Quantity</label>
-                    <input type="number" name="quantity" min="1" required value="{{ old('quantity') }}"
+                    <input type="number" name="quantity" min="1" placeholder="e.g., 50" required value="{{ old('quantity') }}"
                         class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent" />
                 </div>
 
@@ -183,7 +194,7 @@
                 <div>
                     <label class="block text-gray-700">Expiry Date</label>
                     <input type="date" name="expiry_date" required value="{{ old('expiry_date') }}"
-                        class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent" />
+                        class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent" />    
                 </div>
 
                 <!-- Unit Cost -->
@@ -192,18 +203,18 @@
                     <input type="number" name="unit_cost" min="0" step="0.01" required placeholder="e.g., 12.50" value="{{ old('unit_cost') }}"
                         class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent" />
                 </div>
-                <div>
-    <label class="block text-gray-700">Supplier</label>
-    <select name="supplier_id" required
-        class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent">
-        <option value="" selected disabled>Select supplier</option>
-        @foreach($suppliers as $supplier)
-            <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
-                {{ $supplier->name ?? 'Supplier #' . $supplier->id }}
-            </option>
-        @endforeach
-    </select>
-</div>
+                <div>                      
+            <label class="block text-gray-700">Supplier</label>
+            <select name="supplier_id" required
+                class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent">
+                <option value="" selected disabled>Select supplier</option>
+                @foreach($suppliers as $supplier)
+                    <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
+                        {{ $supplier->name ?? 'Supplier #' . $supplier->id }}
+                    </option>
+                @endforeach
+            </select>
+    </div>
 
                 <!-- Status -->
                 <div >
@@ -211,12 +222,13 @@
                     <select name="status" required
                         class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent">
                         <option value="" disabled {{ old('status') ? '' : 'selected' }}>Select status</option>
-                        <option value="Valid" {{ old('status') == 'Available' ? 'selected' : '' }}>Available</option>
+                        <option value="Available" {{ old('status') == 'Available' ? 'selected' : '' }}>Available</option>
                         <option value="Expired" {{ old('status') == 'Expired' ? 'selected' : '' }}>Expired</option>
                         <option value="Out of Stock" {{ old('status') == 'Out of Stock' ? 'selected' : '' }}>Out of Stock</option>
-                    </select>
+                         <option value="Out of Stock and Expired" {{ old('status') == 'Out of Stock and Expired' ? 'selected' : '' }}>Out of Stock and Expired</option>
+                    </select> 
                        <!-- Supplier -->
-         
+                    
                 </div>
                    
 
@@ -241,7 +253,7 @@
 
                 <div>
                     <label class="block text-gray-700">Quantity to Dispense</label>
-                    <input type="number" name="quantity" min="1"  required
+                    <input type="number" name="quantity" min="1" placeholder="e.g., 50" required
                         class="w-full border border-accent-dark px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-accent" />
                 </div>
 

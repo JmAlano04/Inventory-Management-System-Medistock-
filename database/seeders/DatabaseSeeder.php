@@ -20,8 +20,11 @@ class DatabaseSeeder extends Seeder
     
         // $this->call(MedicineSeeder::class);
         // $this->call(UserSeeder::class);
+    //   $this->call([
+    //     SupplierSeeder::class,
+    // ]);
       $this->call([
-        SupplierSeeder::class,
+        ExpirySeeder::class,
     ]);
     }
     

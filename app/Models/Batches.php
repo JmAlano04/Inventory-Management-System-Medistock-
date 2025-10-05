@@ -6,27 +6,35 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Medicine;
 use App\Models\Supplier;
 use Carbon\Carbon;
-class Batch extends Model
+
+class Batches extends Model
 {
     //
      protected $fillable = [
-        'medicine_id',
+        'medicine_name',
         'batch_code',
         'quantity',
         'expiry_date',
         'unit_cost',
+        'supplier_id',
         'status',
     ];
 
       // ✅ Define relationship to the Medicine model
     public function medicine()
     {
-        return $this->belongsTo(Medicine::class);
+        return $this->hasMany(Medicine::class);
     }
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);
     }
+
+     public function expiries()
+    {
+        return $this->hasMany(Expiries::class);
+    }
+
     public function getIsExpiredAttribute()
     {
         return Carbon::now()->gt(Carbon::parse($this->expiration_date));

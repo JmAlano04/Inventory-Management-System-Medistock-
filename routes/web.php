@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MedicineBatchController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\SupplierController;
-
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExpiryMonitoringController;
 Route::get('/', function () {
     return view('welcome');
 });
@@ -24,9 +25,8 @@ Route::middleware('auth')->group(function () {
 Route::group(['middleware' => ['auth']], function () {
 
     // Dashboard
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
 
     // Medicine
     Route::get('/medicine', [MedicineController::class, 'index'])
@@ -65,9 +65,10 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('supplier.store');
 
     // Expiry Monitoring
-    Route::get('/expiry-monitoring', function () {
-        return view('Expiry-Monitoring');
-    })->name('expiry-monitoring');
+     Route::get('/expiry-monitoring', [ExpiryMonitoringController::class, 'index'])
+        ->name('expiry-monitoring');
+
+
 
     // Low Stock Alert
     Route::get('/low-stock-alert', function () {

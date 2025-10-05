@@ -3,14 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\batch;
+use App\Models\Expiries;
 
 class Medicine extends Model
 {
     protected $fillable = [
-        'medicine_name', 'brand_name', 'dosage', 'category'
+        'batches_id', 'brand_name', 'dosage', 'category'
     ];
     public function batches()
     {
-        return $this->hasMany(batch::class);
+        return $this->belongsTO(batches::class);
+    }
+    public function Expiries()
+    {
+        return $this->hasMany(Expiries::class);
     }
 }

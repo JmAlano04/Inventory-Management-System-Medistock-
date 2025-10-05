@@ -50,11 +50,12 @@
                     </div>
                     <div>
                         <p class="text-sm font-medium text-text-muted">Total Inventory</p>
-                        <p class="text-2xl font-semibold text-text-base">1,428</p>
+                        <p class="text-2xl font-semibold text-text-base">{{ number_format($totalInventory) }}</p>
                     </div>
                 </div>
                 <div class="border-t border-secondary-light pt-3">
                     <p class="text-xs text-text-muted">Updated just now</p>
+                    
                 </div>
             </div>
             
@@ -68,7 +69,7 @@
                     </div>
                     <div>
                         <p class="text-sm font-medium text-text-muted">Critical Items</p>
-                        <p class="text-2xl font-semibold text-text-base">23</p>
+                        <p class="text-2xl font-semibold text-text-base">{{ $totalOutOfStock }}</p>
                     </div>
                 </div>
                 <div class="border-t border-secondary-light pt-3">
@@ -86,7 +87,7 @@
                     </div>
                     <div>
                         <p class="text-sm font-medium text-text-muted">Expiring Soon</p>
-                        <p class="text-2xl font-semibold text-text-base">17</p>
+                        <p class="text-2xl font-semibold text-text-base">{{$totalExpiringSoon}}</p>
                     </div>
                 </div>
                 <div class="border-t border-secondary-light pt-3">

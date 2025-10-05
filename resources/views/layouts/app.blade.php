@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'Medistock') }}</title>
         <!-- Inside <head> or before </body> -->
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
@@ -22,7 +22,7 @@
             <!-- Sidebar -->
            <aside class="w-64 h-[calc(100vh-0.5rem)] fixed m-1 z-10 bg-primary-dark shadow rounded-sm">
                 @include('layouts.sidebar')
-            </aside>
+           </aside>
 
 
             <!-- Main Content -->
@@ -44,6 +44,8 @@
                         
                   
                 </main>
+
+                
             </div>
         </div>
     </body>

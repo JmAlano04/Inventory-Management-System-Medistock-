@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Batch;
+use App\Models\Expiries;
 
-class supplier extends Model
+class Supplier extends Model
 {
     //
     protected $fillable = [
@@ -17,6 +18,10 @@ class supplier extends Model
     ];
     public function batches()
 {
-    return $this->hasMany(Batch::class);
+    return $this->hasMany(Batches::class);
+}
+    public function Expiries()
+{
+    return $this->hasMany(Expiries::class);
 }
 }
