@@ -1,11 +1,30 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
+<x-app-layout title="Dashboard">
+
+    <!-- Wrap entire page in Alpine.js x-data -->
+    <div class="py-6" x-data="{
+        showModal: false,
+        modalType: null,
+        modalTitle: '',
+        modalAction: ''
+     }">
+    
+    
+     <div class="flex justify-between space-x-2 pr-4">
+          <div class="flex justify-between items-center">
             <h1 class="text-2xl font-semibold text-text-base ml-3">
-                Inventory Overview
+                  {{ __('Inventory Overview') }}
             </h1>
-                    <div class="flex space-x-2">
-                        <button class="px-4 py-2 bg-button-primary hover:bg-button-hover rounded-md text-sm text-white font-medium flex items-center">
+                   
+        </div>
+        <div class="flex justify-between space-x-2 ">
+            <button
+                         @click="
+                            modalType = 'add';
+                            modalTitle = 'Add New Item';
+                            modalAction = '{{ route('inventory.store') }}';
+                            showModal = true;
+                        " 
+                        class="px-4 py-2 bg-button-primary hover:bg-button-hover rounded-md text-sm text-white font-medium flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                             </svg>
@@ -17,12 +36,13 @@
                             </svg>
                             Export
                         </button>
-                    </div>
-        </div>
-    </x-slot>
 
+        </div>
+           
+            </div>
     <div class="px-4 py-6">
         <!-- Alert Banner -->
+        @if ( $sumOfOutOfStock  >= 1)
         <div class="bg-accent-light border-l-4 border-accent-dark p-4 mb-6 rounded-r">
             <div class="flex items-start">
                 <div class="flex-shrink-0">
@@ -31,12 +51,17 @@
                     </svg>
                 </div>
                 <div class="ml-3">
-                    <p class="text-sm text-text-base">
-                        <span class="font-medium">Attention needed:</span> 23 items are below minimum stock levels.
+                    
+                        <p class="text-sm text-text-base">
+                        <span class="font-medium">Attention needed:</span> {{ $sumOfOutOfStock }} items are below minimum stock levels.
                     </p>
+                   
+                    
                 </div>
             </div>
         </div>
+         @else            
+         @endif
 
         <!-- Main Grid -->
         <div class="grid gap-6 mb-8 md:grid-cols-2 lg:grid-cols-4">
@@ -45,7 +70,7 @@
                 <div class="flex items-center mb-4">
                     <div class="p-3 rounded-full bg-primary-light mr-4">
                         <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                            <path stroke-linec ap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                         </svg>
                     </div>
                     <div>
@@ -69,11 +94,11 @@
                     </div>
                     <div>
                         <p class="text-sm font-medium text-text-muted">Critical Items</p>
-                        <p class="text-2xl font-semibold text-text-base">{{ $totalOutOfStock }}</p>
+                        <p class="text-2xl font-semibold text-text-base">{{ $sumOfOutOfStock }}</p>
                     </div>
                 </div>
                 <div class="border-t border-secondary-light pt-3">
-                    <a href="#" class="text-xs text-accent-dark font-medium hover:underline">View list</a>
+                    <a href="{{ route ('low-stock-alert') }}" class="text-xs text-accent-dark font-medium hover:underline">View list</a>
                 </div>
             </div>
 
@@ -105,9 +130,9 @@
                     </div>
                     <div>
                         <p class="text-sm font-medium text-text-muted">Categories</p>
-                        <p class="text-2xl font-semibold text-text-base">14</p>
-                    </div>
-                </div>
+                        <p class="text-2xl font-semibold text-text-base">{{ $totalCategories }}</p>
+                    </div>     
+                </div>    
                 <div class="border-t border-secondary-light pt-3">
                     <a href="#" class="text-xs text-primary font-medium hover:underline">Manage categories</a>
                 </div>
@@ -163,82 +188,24 @@
                 <a href="#" class="text-sm font-medium text-primary hover:underline">View all activity</a>
             </div>
         </div>
+</div>
 
-        <!-- Low Stock Items Section -->
-        <div class="bg-white rounded-lg border border-secondary-light shadow-xs overflow-hidden">
-            <div class="px-5 py-4 border-b border-secondary-light flex justify-between items-center">
-                <h3 class="font-medium text-text-base">Low Stock Items</h3>
-                <a href="#" class="text-sm font-medium text-primary hover:underline">View all</a>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-secondary-light">
-                    <thead class="bg-secondary-light">
-                        <tr>
-                            <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Item Name</th>
-                            <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Category</th>
-                            <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Current Stock</th>
-                            <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">Minimum Required</th>
-                            <th scope="col" class="px-5 py-3 text-right text-xs font-medium text-text-muted uppercase tracking-wider">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-secondary-light">
-                        <tr class="hover:bg-secondary-light">
-                            <td class="px-5 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-10 w-10 bg-secondary-light rounded-md flex items-center justify-center">
-                                        <svg class="h-6 w-6 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                        </svg>
-                                    </div>
-                                    <div class="ml-4">
-                                        <div class="text-sm font-medium text-text-base">Bandages (Medium)</div>
-                                        <div class="text-xs text-text-muted">Item #BND-042</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-5 py-4 whitespace-nowrap">
-                                <div class="text-sm text-text-base">First Aid</div>
-                            </td>
-                            <td class="px-5 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-accent-light text-accent-dark">5</span>
-                            </td>
-                            <td class="px-5 py-4 whitespace-nowrap">
-                                <div class="text-sm text-text-base">25</div>
-                            </td>
-                            <td class="px-5 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <button class="text-primary hover:text-primary-dark">Reorder</button>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-secondary-light">
-                            <td class="px-5 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-10 w-10 bg-secondary-light rounded-md flex items-center justify-center">
-                                        <svg class="h-6 w-6 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                        </svg>
-                                    </div>
-                                    <div class="ml-4">
-                                        <div class="text-sm font-medium text-text-base">Alcohol Swabs</div>
-                                        <div class="text-xs text-text-muted">Item #ALC-117</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-5 py-4 whitespace-nowrap">
-                                <div class="text-sm text-text-base">Medical Supplies</div>
-                            </td>
-                            <td class="px-5 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-accent-light text-accent-dark">8</span>
-                            </td>
-                            <td class="px-5 py-4 whitespace-nowrap">
-                                <div class="text-sm text-text-base">30</div>
-                            </td>
-                            <td class="px-5 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <button class="text-primary hover:text-primary-dark">Reorder</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+    <!-- Modal Component -->
+    <x-show-modal
+        :show-modal="'showModal'"
+        :action="'modalAction'"
+        x-show="showModal"
+        @click.away="showModal = false"
+        @keydown.escape.window="showModal = false"
+    >
+        {{-- ADD BATCH FORM --}}
+        <template x-if="modalType === 'add'">
+            <form method="POST" :action="modalAction" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                @csrf
+                  @include('profile.partials.add-new-item-modal')
+            </form>
+        </template>
+    </x-show-modal>
         </div>
     </div>
 </x-app-layout>

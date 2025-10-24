@@ -23,10 +23,6 @@
     </span>
 
     </td>
-    <td class="px-4 py-3 whitespace-nowrap">
-        <button> -minus </button>
-
-    </td>
 
     
 </tr>

@@ -1,10 +1,10 @@
-@props([
+{{-- @props([
     'showModal' => 'showEditModal',
     'title' => 'Edit Item',
     'action' => '#',
     'method' => 'POST',
     'submitText' => 'Update',
-])
+]) --}}
 
 <div
     x-show="{{ $showModal }}"

@@ -67,15 +67,15 @@
         </a>
     </li>
 
-    <li>
+     <li>
         <a href="{{ route('low-stock-alert') }}"
            class="flex items-center gap-3 hover:text-orange-300 transition {{ request()->routeIs('low-stock-alert') ? 'text-orange-500 font-semibold' : '' }}">
-            <!-- Bell/Alert SVG -->
+            <!-- Alert/Monitoring SVG -->
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V11a6 6 0 00-9.33-4.955M4 6v1a2 2 0 002 2h1m4 10h4m-4 0a4 4 0 01-4-4H4" />
+                      d="M12 8v4m0 4h.01M4.293 6.707a1 1 0 010-1.414L5.586 4a2 2 0 012.828 0L12 7.586l3.586-3.586a2 2 0 012.828 0l1.293 1.293a1 1 0 010 1.414L12 18l-7.707-7.293z" />
             </svg>
-            Low Stock Alerts
+            Low Stock Alert
         </a>
     </li>
 

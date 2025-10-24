@@ -1,7 +1,7 @@
-<x-app-layout>
+<x-app-layout title="Low stock Alert">
     <x-slot name="header">
         <h2 class="font-bold text-2xl text-text-base text-center leading-tight tracking-wide">
-            {{ __('Low Stock Alert') }}
+            {{ __('Low Stock Management') }}
         </h2>
     </x-slot>
 
@@ -27,6 +27,9 @@
                 </div>
             @endif
 
+
+
+             
                   @if($errors->any())
                     <div
                     x-data="{ show: true }"
@@ -48,8 +51,6 @@
             <!-- Inventory Header -->
         <div class="flex justify-between items-center mb-4">
                 
-  
-
                 <form method="GET" action="{{ url()->current() }}">
                         <label for="perPage" class="text-sm ">Per Page:</label>
                         <select name="perPage" id="perPage" onchange="this.form.submit()" class="border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent">
@@ -68,7 +69,7 @@
                 class="w-96 border border-gray-300 rounded-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" />
 
                  <!-- Inventory Header -->
-                <h3 class="text-lg font-semibold text-gray-800">Critical Items(low Stock)</h3>
+                <h3 class="text-lg font-semibold text-gray-800">Current stock (Low Stock)</h3>
             </div>
 
             <!-- Inventory Table -->
@@ -79,25 +80,26 @@
                             <th class="px-6 py-3 text-text-light text-left ">Medicine</th>
                             <th class="px-6 py-3 text-text-light text-left ">Batch Code</th>
                             <th class="px-6 py-3 text-text-light text-left ">Quantity</th>
-                            <th class="px-6 py-3 text-text-light text-left ">Expiry Date</th>
+                           <th class="px-6 py-3 text-text-light text-left ">Supplier</th>
+                           <th class="px-6 py-3 text-text-light text-left ">Phone</th>
                             <th class="px-6 py-3 text-text-light text-left ">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="table-body" class="divide-y divide-gray-100 bg-white">
-                        @include('profile.partials.low-stock-alert-table-body', ['lowStocks' => $lowStocks])
+                        @include('profile.partials.low-stock-alert-table-body', ['lowStockAlert' => $lowStockAlert])
                     </tbody>
                 </table>
       
                 <!-- Pagination -->
-                {{-- <div class="mt-4 flex flex-col sm:flex-row items-center justify-between px-4 py-4 bg-gray-50 border-t rounded-md">
+                <div class="mt-4 flex flex-col sm:flex-row items-center justify-between px-4 py-4 bg-gray-50 border-t rounded-md">
                     <div class="text-sm text-gray-600">
-                        Showing {{ $expiries->firstItem() }} to {{ $expiries->lastItem() }} of {{ $expiries->total() }} Expiring
+                        Showing {{ $lowStockAlert->firstItem() }} to {{ $lowStockAlert->lastItem() }} of {{ $lowStockAlert->total() }} Low Stock Alert
                     </div>
                     <div class="mt-2 sm:mt-0">
-                        {{ $expiries->appends(request()->query())->links() }}
+                        {{ $lowStockAlert->appends(request()->query())->links() }}
                     </div>
                 </div>
-            </div> --}}
+            </div>
             
   
         </div>

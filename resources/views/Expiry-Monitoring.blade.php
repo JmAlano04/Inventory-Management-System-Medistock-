@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout title="Expiry-Monitoring">
     <x-slot name="header">
         <h2 class="font-bold text-2xl text-text-base text-center leading-tight tracking-wide">
             {{ __('Expiring-Monitoring Management') }}
@@ -71,7 +71,7 @@
                 class="w-96 border border-gray-300 rounded-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" />
 
                  <!-- Inventory Header -->
-                <h3 class="text-lg font-semibold text-gray-800">Current stock (Expiring Soon)</h3>
+                <h3 class="text-lg font-semibold text-gray-800">Current stock (Expiring)</h3>
             </div>
 
             <!-- Inventory Table -->

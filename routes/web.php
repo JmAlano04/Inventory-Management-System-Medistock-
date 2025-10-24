@@ -1,13 +1,17 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\LowStockAlertController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MedicineBatchController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpiryMonitoringController;
+
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -18,6 +22,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    
+    // ACCOUNT MANAGEMENT ROUTE;
+    Route::get('/account', [AccountController::class, 'index'])->name('profile.account');
+     Route::post('/account/store/' , [AccountController::class, 'store'])->name('account.store');
+    Route::put('/account/update/{id}' , [AccountController::class, 'update'])->name('account.update');
 });
 
 
@@ -31,14 +41,10 @@ Route::group(['middleware' => ['auth']], function () {
     // Medicine
     Route::get('/medicine', [MedicineController::class, 'index'])
         ->name('medicine');
-    Route::post('/medicines', [MedicineController::class, 'store'])
-        ->name('medicines.store');
-    Route::put('/medicines/{id}', [MedicineController::class, 'update'])
-        ->name('medicines.update');
+ 
     Route::get('/medicines/search', [MedicineController::class, 'search'])
         ->name('medicines.search');
-    Route::delete('/medicines/{id}', [MedicineController::class, 'destroy'])
-        ->name('medicines.destroy');
+    
 
     // Inventory
     Route::get('/inventory', [InventoryController::class, 'index'])
@@ -71,9 +77,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     // Low Stock Alert
-    Route::get('/low-stock-alert', function () {
-        return view('low-stock-alert');
-    })->name('low-stock-alert');
+    Route::get('/low-stock-alert', [LowStockAlertController::class, 'index'])->name('low-stock-alert');
 
     // Report
     Route::get('/report', function () {

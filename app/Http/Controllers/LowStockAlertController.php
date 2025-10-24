@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Batches;
+use App\Models\Supplier;
 use Carbon\Carbon;
 
 class LowStockAlertController extends Controller
@@ -11,18 +12,18 @@ class LowStockAlertController extends Controller
     //
        public function index(Request $request){
 
-         $perPage = $request->get('perPage', 10); // default to 10 if not provided
-         $expiries = Batches::where('expiry_date', '<=' , carbon::today())
-        
-        ->orderBy('expiry_date', 'desc')
-        ->paginate($perPage);
+         $perPage = request()->get('perPage', 10);
+         $lowStockAlert = Batches::with('supplier')
+            ->where( 'quantity' , '<=' , '50')
+            
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
+    
+            $suppliers = Supplier::all();
 
-        // foreach ($expiries as $Expirie)
-        
-        //     {
-        //         $Expirie->days_diff = Carbon::parse($Expirie->expiry_date)->diffInDays(Carbon::today(), false);
-        //     }
+            
+          
            
-        return view('Expiry-Monitoring', compact ('expiries'));
+        return view('low-stock' , compact('lowStockAlert' , 'suppliers'));
     }
 }

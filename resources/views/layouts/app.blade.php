@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Medistock') }}</title>
+        <title>{{ $title ?? 'Defaut title'}}</title>
         <!-- Inside <head> or before </body> -->
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
@@ -14,6 +14,7 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
+        @livewireStyles
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     </head>
@@ -40,13 +41,15 @@
 
                 <!-- Page Content -->
                 <main>
-                    {{ $slot }}
-                        
-                  
+                    
+                 
+                  {{ $slot ?? '' }}
+                 
                 </main>
 
                 
             </div>
         </div>
+        @livewireScripts
     </body>
 </html>

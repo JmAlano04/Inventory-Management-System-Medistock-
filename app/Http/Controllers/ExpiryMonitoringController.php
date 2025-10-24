@@ -21,7 +21,7 @@ class ExpiryMonitoringController extends Controller
         foreach ($expiries as $Expirie)
             
             {
-                $Expirie->days_diff = Carbon::parse($Expirie->expiry_date)->diffInDays(Carbon::today(), false);
+                $Expirie->days_diff = Carbon::parse($Expirie->expiry_date)->diffInDays(Carbon::today(), absolute: false);
             }
            
         return view('Expiry-Monitoring', compact ('expiries'));

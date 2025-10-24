@@ -64,12 +64,15 @@
                 </a>
             </div> --}}
         </div>
+
+        
     </main>
 
     <!-- Footer -->
     <footer class="w-full text-center text-sm text-text-muted py-4">
         &copy; {{ date('Y') }} MediStock. All rights reserved.
     </footer>
+    
 </body>
 
 

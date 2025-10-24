@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout title="Medicine">
     <x-slot name="header">
         <h2 class="font-bold text-2xl text-text-base text-center leading-tight tracking-wide">
             {{ __('Medicine Management') }}
@@ -43,7 +43,7 @@
                         </select>
                     </form>
                 </div>
-               
+                
                 <input
                     type="text"
                     id="search"
@@ -73,7 +73,7 @@
                             <th class="px-4 py-3 text-left">Unit cost</th>
                             <th class="px-4 py-3 text-left">Quantity</th>
                             <th class="px-4 py-3 text-left">Status</th>
-                            <th class="px-4 py-3 text-left">Action</th>
+                            
                         </tr>
                     </thead>
                     <tbody id="table-body" class="divide-y divide-gray-100 bg-white">

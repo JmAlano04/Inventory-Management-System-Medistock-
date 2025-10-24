@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout title="Supplier">
     <x-slot name="header">
         <h2 class="font-bold text-2xl text-text-base text-center leading-tight tracking-wide">
             {{ __('Supplier Management') }}
@@ -79,7 +79,7 @@
 
         </div>
     </div>
-    <x-show-modal :showModal="'showModal'" :action="route('medicines.store')" title="Add Item" submitText="Create">
+    <x-show-modal :showModal="'showModal'" :action="route('supplier.store')" title="Add Item" submitText="Create">
 
      <form action="{{ route('supplier.store') }}" method="POST">
      @csrf

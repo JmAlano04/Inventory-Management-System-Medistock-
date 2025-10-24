@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout title="Report">
     <x-slot name="header">
           <h2 class="font-bold text-2xl text-text-base text-center leading-tight tracking-wide">
             {{ __('Report Management') }}

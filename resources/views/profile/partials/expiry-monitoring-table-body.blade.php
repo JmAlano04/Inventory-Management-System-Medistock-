@@ -39,7 +39,7 @@
                             <h1 class="px-6 py-4 text-lg">Medicine name: <span>{{ $Expirie->medicine_name }}</span></h1>
                             <h1 class="px-6 py-4 text-lg">Batch Code: <span>{{ $Expirie->batch_code }}</span></h1>
                             <h1 class="px-6 py-4 text-lg">Quantity: <span>{{ $Expirie->quantity }}</span></h1>
-                            <h1 class="px-6 py-4 text-lg">Expiry Date: <span>{{ $Expirie->expiry_date }}</span></h1>
+                            <h1 class="px-6 py-4 text-lg">Expiry Date: <span>{{\Carbon\Carbon::parse($Expirie->expiry_date)->format('M. d, Y')  }}</span></h1>
                             <h1 class="px-6 py-4 text-lg">Days since expiry: <span>
                                 @if ($Expirie->days_diff > 1)
                                 {{ abs($Expirie->days_diff) }} Days ago
@@ -54,7 +54,7 @@
                     </x-view-modal>
                                 {{-- DELETE AJAX --}}
                                 @vite('resources/js/ajax_delete_inventory.js')
-                </div>
+                              </div>
                             </td> 
                            
                            
